@@ -1,0 +1,38 @@
+{% extends "upload_file/base.html" %}
+{% load static %}
+
+{% block title %}Data Preview | DataCraft{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/preview.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="preview-wrapper">
+    <div class="preview-header">
+        <h2>Data Preview</h2>
+        <div class="file-info">
+            <span class="file-name">{{ file_name }}</span>
+            <span class="shape-info">{{ shape.0 }} rows × {{ shape.1 }} columns</span>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <div class="table-scroll-container">
+            {{ data_preview|safe }}
+        </div>
+    </div>
+
+    <div class="actions-container">
+        <form method="post" class="actions-form">
+            {% csrf_token %}
+            <button type="submit" name="reject" class="btn btn-reject">
+                <i class="fas fa-redo"></i> Reupload
+            </button>
+            <button type="submit" name="confirm" class="btn btn-confirm">
+                Continue <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

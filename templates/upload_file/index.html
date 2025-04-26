@@ -1,0 +1,53 @@
+{% extends "upload_file/base.html" %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/upload.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container">
+    <header>
+        <h1>Analyze Your CSV/XLSX Data</h1>
+        <p class="subtitle">Upload your dataset and get insights</p>
+    </header>
+
+    <div class="upload-card">
+        <div class="upload-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+        </div>
+
+        <h2 style="margin-bottom: 0.5rem;">Drag & Drop Your File</h2>
+        <p style="color: #777; margin-bottom: 1.5rem;">or click to browse your computer</p>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="upload-area" id="uploadArea">
+                <input type="file" id="fileInput" class="file-input" accept=".csv, .xlsx" name="file" style="display: none;">
+                <p>Supported formats: .csv, .xlsx</p>
+                <p style="font-size: 0.8rem; margin-top: 0.5rem;">Max file size: 10MB</p>
+            </div>
+
+            {% if errors %}
+            <div class="alert alert-error">
+                <strong>Please correct the following errors:</strong>
+                <ul>
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        
+            <button type="button" id="selectBtn" class="btn pulse">Select File</button>
+            <button type="submit" id="uploadBtn" class="btn" style="display: none; background-color: #4361ee;">Upload File</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>DataCraft • Powered by Dubna University • 2025</p>
+    </footer>
+</div>
+{% endblock %}
