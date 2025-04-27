@@ -4,7 +4,7 @@
 {% block title %}Data Processing | DataCraft{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/processing.css' %}">
+<link rel="stylesheet" href="{% static 'css/preprocessing.css' %}">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 {% endblock %}
 
@@ -28,7 +28,7 @@
                 {% for column in columns %}
                 <label class="column-checkbox">
                     <input type="checkbox" name="selected_columns" value="{{ column }}" checked>
-                    {{ column }} ({{ column_types|get_item:column }})
+                    {% comment %} {{ column }} ({{ column_types|get_item:column }}) {% endcomment %}
                 </label>
                 {% endfor %}
             </div>
@@ -147,5 +147,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/processing.js' %}"></script>
+<script src="{% static 'js/preprocessing.js' %}"></script>
 {% endblock %}

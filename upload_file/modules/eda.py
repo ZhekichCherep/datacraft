@@ -1,6 +1,7 @@
 import pandas as pd
 import chardet
 import json
+import upload_file.modules.fstream_operations as fstream_operations
 
 READ_FUNCTIONS = {
     'read_csv': pd.read_csv,
@@ -24,6 +25,7 @@ def read_data_file(file_path: str) -> tuple:
             {},  
             {'sep': ','},
             {'sep': ';'},
+            {'sep': '; '},
             {'sep': '\t'},
             {'header': 0},
             {'header': None},
@@ -40,34 +42,30 @@ def read_data_file(file_path: str) -> tuple:
             df = read_function(file_path, **params)
             if df.shape[1] > max_width:
                 params_index = i
-                max_width = df.shape[2]
+                max_width = df.shape[1]
                 
         except Exception as e:
-            raise ValueError(['Ошибка при чтении файла ' + file_path[: file_path.rfind('/')]])
+            raise ValueError(['Ошибка при чтении файла ' + file_path])
 
     if params_index != -1:
         path = file_path[: file_path.rfind('/')] + 'config.json'
-        try:
-            with open(path, 'w', encoding='utf-8') as f:
-                param_grid[params_index].update({'read_function': read_function_name})
-                json.dump(param_grid[params_index], f, ensure_ascii=False)
-        except:
-            return (None, ['Ошибка при попытке сохранения, попробуйте ещё раз'])
+        param_grid[params_index].update({'read_function': read_function_name})
+        if fstream_operations.write_json(param_grid[params_index], path):
+            return (path, None)
+
+    return (None, ['Ошибка при попытке сохранения, попробуйте ещё раз'])
         
-        return (path, None)
     
 
 
 def get_preview_data(path_to_file, path_to_config) -> dict:
-    params = ['ioa']
-    try:
-        with open(path_to_config, 'r', encoding='utf-8') as f:
-            params = json.load(f)
-    except:
-        raise ValueError(f'Не удалось прочитать файл {path_to_config} с парамтрами')
-    
-    read_function = READ_FUNCTIONS[params.pop('read_function')]
-    df = read_function(path_to_file, **params)
-    return {'data_preview': df.head().to_html(classes='table table-striped'),
+    params = {}
+    if fstream_operations.json_load(params, path_to_config):
+        # read_function = READ_FUNCTIONS[params.pop('read_function')]
+        read_function = pd.read_csv
+        df = read_function(path_to_file, **params)
+        return {'data_preview': df.head().to_html(classes='table table-striped'),
             'columns': df.columns.tolist(),
             'shape': df.shape} 
+    
+    return None

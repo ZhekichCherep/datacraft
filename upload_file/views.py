@@ -47,12 +47,16 @@ def upload_file(request):
 
     else:
         form = UploadFileForm()
-    
-    return render(request, 'upload_file/index.html', {'form': form})
+    request.session.flush()
+    return render(request, 'upload_file/index.html')
 
 def preview(request):
     if UPLOADED_FILE_PATH not in request.session or CONFIG_PATH not in request.session:
         return redirect('upload_file')
+    
+    if request.method == 'POST' and UPLOADED_FILE_PATH in request.session and CONFIG_PATH in request.session:
+        if 'confirm' in request.POST:
+            return redirect('choose_preprocessing_pipeline')
 
     context = {
         'file_name': request.session.get('file_name', '')
@@ -61,5 +65,14 @@ def preview(request):
 
     return render(request, 'upload_file/preview.html', context)
 
+def confirm(request):
+    if request.method == 'POST' and UPLOADED_FILE_PATH in request.session and CONFIG_PATH in request.session:
+        if 'confirm' in request.POST:
+            return redirect('choose_preprocessing_pipeline')
+                
+        request.session.flush()
+        return redirect('upload_file')
 
 
+def choose_preprocessings_pipeline(request):
+    return render(request, 'upload_file/preprocessing.html')
