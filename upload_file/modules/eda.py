@@ -2,6 +2,7 @@ import pandas as pd
 import chardet
 import json
 import upload_file.modules.fstream_operations as fstream_operations
+import numpy as np
 
 READ_FUNCTIONS = {
     'read_csv': pd.read_csv,
@@ -56,9 +57,12 @@ def read_data_file(file_path: str) -> tuple:
     return (None, ['Ошибка при попытке сохранения, попробуйте ещё раз'])
         
     
+def try_to_numeric(df:pd.DataFrame) -> pd.DataFrame:
+    for column in df.columns.to_list():
+        pass
+    return df
 
-
-def get_preview_data(path_to_file, path_to_config) -> dict:
+def get_preview_data(path_to_file: str, path_to_config: str) -> dict:
     params = {}
     if fstream_operations.json_load(params, path_to_config):
         # read_function = READ_FUNCTIONS[params.pop('read_function')]
@@ -69,3 +73,14 @@ def get_preview_data(path_to_file, path_to_config) -> dict:
             'shape': df.shape} 
     
     return None
+
+def get_data_columns(path_to_file: str, path_to_config: str, is_num_columns=True) -> list:
+    params = {}
+    if fstream_operations.json_load(params, path_to_config):
+        # read_function = READ_FUNCTIONS[params.pop('read_function')]
+        read_function = pd.read_csv
+        df = read_function(path_to_file, **params)
+        if is_num_columns:
+            return df.select_dtypes(include=np.number).columns.tolist()
+        return df.select_dtypes(include=np.object_).columns.tolist() 
+    

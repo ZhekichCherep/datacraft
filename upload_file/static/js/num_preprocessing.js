@@ -1,12 +1,9 @@
-// processing.js
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Включение/выключение опций при переключении метода
     toggleOptions('process_missing', 'missing_strategy');
     toggleOptions('process_outliers', 'outlier_strategy');
-    toggleOptions('process_categorical', 'categorical_strategy');
+    // toggleOptions('process_categorical', 'categorical_strategy');
     toggleOptions('process_normalization', 'normalization_strategy');
-    toggleOptions('process_text', ['text_lowercase', 'text_remove_punct', 'text_remove_stopwords', 'text_stemming']);
+    // toggleOptions('process_text', ['text_lowercase', 'text_remove_punct', 'text_remove_stopwords', 'text_stemming']);
 
     // Динамическое отображение поля для константного значения
     const missingStrategy = document.querySelector('select[name="missing_strategy"]');
@@ -22,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Обработка выбора колонок
     const columnCheckboxes = document.querySelectorAll('.column-checkbox input');
     const selectAllBtn = document.createElement('button');
     selectAllBtn.type = 'button';
@@ -41,10 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
         this.textContent = allSelected ? 'Deselect All' : 'Select All';
     });
 
-    // Валидация формы перед отправкой
     const form = document.querySelector('.processing-form');
     form.addEventListener('submit', function(e) {
-        // Проверяем, что выбрана хотя бы одна колонка
         const selectedColumns = Array.from(columnCheckboxes).filter(cb => cb.checked);
         if (selectedColumns.length === 0) {
             e.preventDefault();
@@ -52,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Дополнительные проверки можно добавить здесь
     });
 
     // Функция для включения/выключения опций при переключении метода
@@ -84,24 +77,4 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-
-    // Показываем информацию о типе данных при наведении на колонку
-    columnCheckboxes.forEach(checkbox => {
-        const label = checkbox.parentNode;
-        const columnName = checkbox.value;
-        
-        // Создаем tooltip (если у вас есть информация о типах)
-        const tooltip = document.createElement('span');
-        tooltip.className = 'column-tooltip';
-        // tooltip.textContent = `Type: ${columnTypes[columnName]}`; // Раскомментируйте, если передаете типы
-        label.appendChild(tooltip);
-        
-        label.addEventListener('mouseenter', function() {
-            tooltip.style.visibility = 'visible';
-        });
-        
-        label.addEventListener('mouseleave', function() {
-            tooltip.style.visibility = 'hidden';
-        });
-    });
 });

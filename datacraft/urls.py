@@ -19,12 +19,11 @@ from django.urls import path
 
 from django.contrib import admin
 from django.urls import path
-from upload_file.views import upload_file, preview, confirm, choose_preprocessings_pipeline
+from upload_file.views import upload_file, preview, num_preprocessings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', upload_file, name='upload_file'),
     path('preview/', preview, name='preview'),
-    path('confirm/', confirm, name='confirm'),
-    path('preprocessing/', choose_preprocessings_pipeline, name='choose_preprocessing_pipeline')
+    path('num_preprocessing/', num_preprocessings, name='num_preprocessing')
 ]

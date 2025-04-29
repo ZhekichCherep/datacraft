@@ -25,3 +25,4 @@ def json_load(var_to_change: dict, path: str) -> bool:
         return True
     except:
         return False
+    
