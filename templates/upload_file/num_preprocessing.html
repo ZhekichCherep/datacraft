@@ -34,7 +34,6 @@
         </div>
 
         <div class="processing-methods">
-            <!-- 1. Заполнение пропусков -->
             <div class="method-card">
                 <div class="method-header">
                     <h4><i class="fas fa-fill-drip"></i> Missing Values</h4>
@@ -47,9 +46,10 @@
                     <select name="missing_strategy" class="form-select">
                         <option value="mean">Mean</option>
                         <option value="median">Median</option>
-                        <option value="mode">Mode<option>
+                        <option value="mode">Mode</option>
+                        <option value="constant" name=>Constant</option>
                         <option value="drop">Drop rows with missing</option>
-                        <option value="ML_pred">ML predicts</option>
+                        <option value="ML_pred">ML predicts</option> 
                     </select>
                     <input type="text" name="missing_constant" placeholder="Constant value" class="form-input" style="display: none;">
                 </div>
@@ -132,7 +132,7 @@
         </div>
 
         <div class="form-actions">
-            <button type="button" class="btn btn-back", name="back">
+            <button type="button" class="btn btn-back" onclick="window.location.href='{% url 'preview' %}'">
                 <i class="fas fa-arrow-left"></i> Back
             </button>
             <button type="submit" class="btn btn-process", name="next">

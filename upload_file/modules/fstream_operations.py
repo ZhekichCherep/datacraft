@@ -18,11 +18,10 @@ def write_json(dct: dict, path: str) -> None:
     except:
         return False
     
-def json_load(var_to_change: dict, path: str) -> bool:
+def json_load( path: str) -> bool:
     try:
         with open(path, 'r', encoding='utf-8') as f:
-            var_to_change = json.load(f)
-        return True
+            return json.load(f)
     except:
         return False
     

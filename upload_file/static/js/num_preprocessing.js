@@ -1,3 +1,10 @@
+document.querySelector('.btn-back').addEventListener('click', function(e) {
+    e.preventDefault(); 
+    window.location.href = "{% url 'preview' %}";
+});
+
+document.querySelector('.constant')
+
 document.addEventListener('DOMContentLoaded', function() {
     toggleOptions('process_missing', 'missing_strategy');
     toggleOptions('process_outliers', 'outlier_strategy');
@@ -12,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     missingStrategy.addEventListener('change', function() {
         if (this.value === 'constant') {
             missingConstant.style.display = 'block';
-            missingConstant.setAttribute('required', 'required');
+            missingConstant.setAttribute('required');
         } else {
             missingConstant.style.display = 'none';
             missingConstant.removeAttribute('required');

@@ -19,11 +19,21 @@ from django.urls import path
 
 from django.contrib import admin
 from django.urls import path
-from upload_file.views import upload_file, preview, num_preprocessings
+from upload_file.views import (
+    upload_file, 
+    preview, 
+    action_choice,
+    num_preprocessings,
+    text_preprocessing,  
+    model_building       
+)
+from django.urls import path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', upload_file, name='upload_file'),
     path('preview/', preview, name='preview'),
-    path('num_preprocessing/', num_preprocessings, name='num_preprocessing')
+    path('action-choice/', action_choice, name='action_choice'),
+    path('num-preprocessing/', num_preprocessings, name='num_preprocessing'),
+    path('text-preprocessing/', text_preprocessing, name='text_preprocessing'),
+    path('model-building/', model_building, name='model_building'),
 ]

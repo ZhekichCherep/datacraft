@@ -23,8 +23,8 @@ def read_data_file(file_path: str) -> tuple:
     else:
         read_function_name = 'read_csv'
         param_grid = [
-            {},  
             {'sep': ','},
+            {},
             {'sep': ';'},
             {'sep': '; '},
             {'sep': '\t'},
@@ -62,25 +62,28 @@ def try_to_numeric(df:pd.DataFrame) -> pd.DataFrame:
         pass
     return df
 
-def get_preview_data(path_to_file: str, path_to_config: str) -> dict:
+def get_preview_data(path_to_file: str, path_to_config: str, read_function_name='') -> dict:
     params = {}
-    if fstream_operations.json_load(params, path_to_config):
-        # read_function = READ_FUNCTIONS[params.pop('read_function')]
-        read_function = pd.read_csv
+    params = fstream_operations.json_load(path_to_config)
+
+    if params:
+        read_function = READ_FUNCTIONS[params.pop('read_function')]
         df = read_function(path_to_file, **params)
         return {'data_preview': df.head().to_html(classes='table table-striped'),
             'columns': df.columns.tolist(),
-            'shape': df.shape} 
+            'shape': df.shape, 
+            'num_cols': df.select_dtypes(include=np.number).columns.tolist(),
+            'obj_cols': df.select_dtypes(include=np.object_).columns.tolist()} 
     
     return None
 
-def get_data_columns(path_to_file: str, path_to_config: str, is_num_columns=True) -> list:
-    params = {}
-    if fstream_operations.json_load(params, path_to_config):
-        # read_function = READ_FUNCTIONS[params.pop('read_function')]
-        read_function = pd.read_csv
-        df = read_function(path_to_file, **params)
-        if is_num_columns:
-            return df.select_dtypes(include=np.number).columns.tolist()
-        return df.select_dtypes(include=np.object_).columns.tolist() 
+# def get_data_columns(path_to_file: str, path_to_config: str, is_num_columns=True) -> list:
+#     params = {}
+#     if fstream_operations.json_load(params, path_to_config):
+#         # read_function = READ_FUNCTIONS[params.pop('read_function')]
+#         read_function = pd.read_csv
+#         df = read_function(path_to_file, **params)
+#         if is_num_columns:
+#             return df.select_dtypes(include=np.number).columns.tolist()
+#         return df.select_dtypes(include=np.object_).columns.tolist() 
     

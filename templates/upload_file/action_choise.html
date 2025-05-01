@@ -1,0 +1,61 @@
+{% extends "upload_file/base.html" %}
+{% load static %}
+
+{% block title %}Choose Action | DataCraft{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/action_choice.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="action-choice-container">
+    <div class="action-header">
+        <h2>What would you like to do next?</h2>
+        <div class="file-info">
+            <span class="file-name">{{ file_name }}</span>
+            <span class="shape-info">{{ shape.0 }} rows × {{ shape.1 }} columns</span>
+        </div>
+    </div>
+
+    <div class="action-cards">
+        <!-- Обработка числовых данных -->
+        <a href="{% url 'num_preprocessing' %}" class="action-card">
+            <div class="card-icon">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <h3>Process Numerical Data</h3>
+            <p>Clean, normalize and analyze numerical columns</p>
+        </a>
+
+        <!-- Обработка текстовых данных -->
+        <a href="{% url 'text_preprocessing' %}" class="action-card">
+            <div class="card-icon">
+                <i class="fas fa-font"></i>
+            </div>
+            <h3>Process Text Data</h3>
+            <p>Tokenize, vectorize and analyze text columns</p>
+        </a>
+
+        <!-- Построение ML модели -->
+        <a href="{% url 'model_building' %}" class="action-card">
+            <div class="card-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>Build ML Model</h3>
+            <p>Train and evaluate machine learning models</p>
+        </a>
+
+        <!-- Начать заново -->
+        <form method="post" class="restart-form">
+            {% csrf_token %}
+            <button type="submit" name="restart" class="action-card restart-card">
+                <div class="card-icon">
+                    <i class="fas fa-redo"></i>
+                </div>
+                <h3>Start Over</h3>
+                <p>Upload a new dataset</p>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

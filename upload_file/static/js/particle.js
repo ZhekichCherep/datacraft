@@ -1,4 +1,3 @@
-// Функция для обработки загрузки файлов
 function initFileUpload() {
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
@@ -7,17 +6,14 @@ function initFileUpload() {
 
     if (!uploadArea || !fileInput || !selectBtn || !uploadBtn) return;
 
-    // Обработка кликов
     uploadArea.addEventListener('click', () => fileInput.click());
     selectBtn.addEventListener('click', () => fileInput.click());
 
-    // Обработка выбора файла
     fileInput.addEventListener('change', function() {
         if (this.files.length) {
             selectBtn.style.display = 'none';
             uploadBtn.style.display = 'inline-block';
 
-            // Показ имени файла
             const fileName = this.files[0].name;
             const fileInfo = document.createElement('p');
             fileInfo.textContent = `Selected: ${fileName}`;
@@ -27,7 +23,6 @@ function initFileUpload() {
         }
     });
 
-    // Drag and Drop функционал
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.style.borderColor = '#4361ee';
@@ -49,7 +44,6 @@ function initFileUpload() {
     });
 }
 
-// Функция для инициализации particles.js
 function initParticles() {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js';
@@ -108,30 +102,6 @@ function initParticles() {
                     }
                 }
             },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "repulse",
-                        distance: 50
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push",
-                        distance: 100
-                    }
-                },
-                modes: {
-                    repulse: {
-                        distance: 50,
-                        duration: 0.4
-                    },
-                    push: {
-                        particles_nb: 4
-                    }
-                }
-            },
             retina_detect: true,
             smooth: true
         });
@@ -139,7 +109,6 @@ function initParticles() {
     document.body.appendChild(script);
 }
 
-// Инициализация всех функций после загрузки DOM
 document.addEventListener('DOMContentLoaded', function() {
     initFileUpload();
     initParticles();
