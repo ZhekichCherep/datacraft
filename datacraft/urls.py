@@ -19,14 +19,8 @@ from django.urls import path
 
 from django.contrib import admin
 from django.urls import path
-from upload_file.views import (
-    upload_file, 
-    preview, 
-    action_choice,
-    num_preprocessings,
-    text_preprocessing,  
-    model_building       
-)
+from upload_file.views import upload_file, preview, action_choice
+from work_with_dataset.views import num_preprocessings, text_preprocessing, model_building
 from django.urls import path
 
 urlpatterns = [
