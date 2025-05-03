@@ -1,6 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', function() {
-
     function toggleOptions(checkboxName, targetElements) {
         const checkbox = document.querySelector(`input[name="${checkboxName}"]`);
         if (!checkbox) return;
@@ -21,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    toggleOptions('process_missing', 'missing_strategy');
     toggleOptions('process_outliers', 'outlier_strategy');
     // toggleOptions('process_categorical', 'categorical_strategy');
     toggleOptions('process_normalization', 'normalization_strategy');

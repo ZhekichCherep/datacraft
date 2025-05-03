@@ -56,7 +56,7 @@ def upload_file(request):
     return render(request, 'upload_file/index.html')
 
 def preview(request):
-    if UPLOADED_FILE_PATH not in request.session or CONFIG_PATH not in request.session:
+    if COPIED_FILE_PATH not in request.session or CONFIG_PATH not in request.session:
         cleanup_session(request)
         return redirect('upload_file')
     
@@ -82,7 +82,7 @@ def preview(request):
         return render(request, 'upload_file/index.html', {'errors': [str(e)]})
 
 def action_choice(request):
-    if not all(key in request.session for key in [UPLOADED_FILE_PATH, CONFIG_PATH, SHAPE]):
+    if not all(key in request.session for key in [COPIED_FILE_PATH, CONFIG_PATH, SHAPE]):
         cleanup_session(request)
         return redirect('upload_file')
     
@@ -92,7 +92,7 @@ def action_choice(request):
     
     context = {
         'file_name': request.session.get('file_name', ''),
-        'shape': request.session.get(SHAPE, (0, 0))
+        'shape': get_preview_data(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH])[SHAPE]
     }
     return render(request, 'upload_file/action_choise.html', context)
 

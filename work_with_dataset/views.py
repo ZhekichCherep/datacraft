@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
-import time
+
 from upload_file.views import cleanup_session
 from upload_file.views import COPIED_FILE_PATH, CONFIG_PATH, NUM_COLS, SHAPE, FILE_NAME, OBJ_COLS
+from .num_preprocessing import process_num
 
 def num_preprocessings(request):
     if not all(key in request.session for key in [COPIED_FILE_PATH, CONFIG_PATH, NUM_COLS, SHAPE]):
@@ -10,21 +10,16 @@ def num_preprocessings(request):
         return redirect('upload_file')
     
     if request.method == 'POST':
-        try:
-            selected_columns = request.POST.getlist('selected_columns')  
-            process_missing = 'process_missing' in request.POST  
-            missing_strategy = request.POST.get('missing_strategy')
-            missing_constant = request.POST.get('missing_constant')
-            process_outliers = 'process_outliers' in request.POST
-            outlier_strategy = request.POST.get('outlier_strategy')
-            process_normalization = 'process_normalization' in request.POST
-            normalization_strategy = request.POST.get('normalization_strategy')
-            request.session['processing_done'] = True
-            
-            return redirect('action_choise')
         
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        selected_columns = request.POST.getlist('selected_columns')   
+        missing_strategy = request.POST.get('missing_strategy')
+        missing_constant = request.POST.get('missing_constant')
+        outlier_strategy = request.POST.get('outlier_strategy')
+        normalization_strategy = request.POST.get('normalization_strategy')
+        process_num(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH], selected_columns, missing_strategy, missing_constant, outlier_strategy, normalization_strategy)
+        request.session['processing_done'] = True
+        return redirect('action_choice')
+    
 
 
     try:

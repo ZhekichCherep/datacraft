@@ -176,6 +176,12 @@ input:checked + .slider:before {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.method-card .method-header h4 {
+    position: relative;
+    padding-left: 20px;
+}
+
+
 .modal-overlay {
     position: fixed;
     top: 0;

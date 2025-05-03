@@ -94,10 +94,7 @@ function initParticles() {
             },
             retina_detect: true
         });
-    };
-    script.onerror = function() {
-        console.error("Failed to load particles.js");
-    };    
+    }; 
     document.body.appendChild(script);
 }
 

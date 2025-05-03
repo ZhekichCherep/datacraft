@@ -48,3 +48,30 @@
 .restart-card:hover {
     background: #f1f3f5;
 }
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.btn-back-preview {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 15px;
+    background-color: #f0f0f0;
+    color: #333;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-back-preview:hover {
+    background-color: #e0e0e0;
+}
+
+.btn-back-preview i {
+    margin-right: 5px;
+}

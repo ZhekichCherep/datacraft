@@ -10,7 +10,12 @@
 {% block content %}
 <div class="action-choice-container">
     <div class="action-header">
-        <h2>What would you like to do next?</h2>
+        <div class="header-top">
+            <h2>What would you like to do next?</h2>
+            <a href="{% url 'preview' %}" class="btn-back-preview">
+                <i class="fas fa-arrow-left"></i> Back to Preview
+            </a>
+        </div>
         <div class="file-info">
             <span class="file-name">{{ file_name }}</span>
             <span class="shape-info">{{ shape.0 }} rows × {{ shape.1 }} columns</span>

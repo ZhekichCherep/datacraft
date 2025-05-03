@@ -37,21 +37,19 @@
             <div class="method-card">
                 <div class="method-header">
                     <h4><i class="fas fa-fill-drip"></i> Missing Values</h4>
-                    <label class="switch">
-                        <input type="checkbox" name="process_missing" checked>
-                        <span class="slider round"></span>
-                    </label>
+                    <input type="hidden" name="process_missing" value="on">  
                 </div>
                 <div class="method-options">
-                    <select name="missing_strategy" class="form-select">
+                    <select name="missing_strategy" class="form-select">  
                         <option value="mean">Mean</option>
                         <option value="median">Median</option>
                         <option value="mode">Mode</option>
-                        <option value="constant" name=>Constant</option>
+                        <option value="constant">Constant</option>
                         <option value="drop">Drop rows with missing</option>
-                        <option value="ML_pred">ML predicts</option> 
+                        <option value="ml_pred"> ML predicts</option>
                     </select>
                     <input type="text" name="missing_constant" placeholder="Constant value" class="form-input" style="display: none;">
+                    <p class="form-note"><small>* Required processing</small></p>
                 </div>
             </div>
 
