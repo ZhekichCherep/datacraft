@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 from upload_file.views import cleanup_session
 from upload_file.views import COPIED_FILE_PATH, CONFIG_PATH, NUM_COLS, SHAPE, FILE_NAME, OBJ_COLS
-from .num_preprocessing import process_num
+from .preprocesses.num_preprocessing import process_num
 
 def num_preprocessings(request):
     if not all(key in request.session for key in [COPIED_FILE_PATH, CONFIG_PATH, NUM_COLS, SHAPE]):
