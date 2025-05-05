@@ -20,7 +20,8 @@ from django.urls import path
 from django.contrib import admin
 from django.urls import path
 from upload_file.views import upload_file, preview, action_choice
-from work_with_dataset.views import num_preprocessings, text_preprocessing, model_building
+from work_with_dataset.views import (num_preprocessings, text_preprocessing, model_building,
+                                    export_dataset, export_pipeline, import_pipeline, apply_pipeline)
 from django.urls import path
 
 urlpatterns = [
@@ -30,4 +31,8 @@ urlpatterns = [
     path('num-preprocessing/', num_preprocessings, name='num_preprocessing'),
     path('text-preprocessing/', text_preprocessing, name='text_preprocessing'),
     path('model-building/', model_building, name='model_building'),
+    path('export_dataset/', export_dataset, name='export_dataset'),
+    path('export_pipeline/', export_pipeline, name='export_pipeline'),
+    path('import_pipeline/', import_pipeline, name='import_pipeline'),
+    path('apply_pipeline/', apply_pipeline, name='apply_pipeline'),
 ]

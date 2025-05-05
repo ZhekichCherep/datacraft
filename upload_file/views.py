@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from core.modules.forms import UploadFileForm
 from core.modules.eda import read_data_file, get_preview_data
-from core.modules.fstream_operations import save_to_temp_dir, delete_files
+from core.modules.fstream_operations import save_to_temp_dir, delete_files, read_work_file
 from django.conf import settings
 
 UPLOADED_FILE_PATH = 'uploaded_file_path'

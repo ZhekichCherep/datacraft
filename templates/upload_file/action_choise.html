@@ -7,6 +7,10 @@
 <link rel="stylesheet" href="{% static 'css/action_choice.css' %}">
 {% endblock %}
 
+{% block extra_js %}
+<script src="{% static 'js/action_choice.js' %}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="action-choice-container">
     <div class="action-header">
@@ -50,6 +54,50 @@
             <p>Train and evaluate machine learning models</p>
         </a>
 
+        <!-- Выгрузка датасета -->
+        <a href="{% url 'export_dataset' %}" class="action-card">
+            <div class="card-icon">
+                <i class="fas fa-file-export"></i>
+            </div>
+            <h3>Export Dataset</h3>
+            <p>Download processed dataset</p>
+        </a>
+
+        <!-- Выгрузка пайплайна -->
+        <a href="{% url 'export_pipeline' %}" class="action-card">
+            <div class="card-icon">
+                <i class="fas fa-project-diagram"></i>
+            </div>
+            <h3>Export Pipeline</h3>
+            <p>Download preprocessing pipeline</p>
+        </a>
+
+        <!-- Загрузка пайплайна -->
+        <form method="post" action="{% url 'import_pipeline' %}" enctype="multipart/form-data" class="action-card-form">
+            {% csrf_token %}
+            <label class="action-card">
+                <div class="card-icon">
+                    <i class="fas fa-file-import"></i>
+                </div>
+                <h3>Import Pipeline</h3>
+                <p>Upload preprocessing pipeline</p>
+                <input type="file" name="pipeline_file" accept=".pkl,.joblib" style="display: none;">
+            </label>
+        </form>
+
+        <!-- Применение пайплайна -->
+        <form method="post" action="{% url 'apply_pipeline' %}" enctype="multipart/form-data" class="action-card-form">
+            {% csrf_token %}
+            <label class="action-card">
+                <div class="card-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>Apply Pipeline</h3>
+                <p>Apply pipeline to new dataset</p>
+                <input type="file" name="dataset_file" accept=".csv,.xlsx,.json" style="display: none;">
+            </label>
+        </form>
+
         <!-- Начать заново -->
         <form method="post" class="restart-form">
             {% csrf_token %}
@@ -63,4 +111,19 @@
         </form>
     </div>
 </div>
+
+<script>
+document.querySelectorAll('.action-card-form .action-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const fileInput = this.querySelector('input[type="file"]');
+        fileInput.click();
+    });
+});
+
+document.querySelectorAll('.action-card-form input[type="file"]').forEach(input => {
+    input.addEventListener('change', function() {
+        this.closest('form').submit();
+    });
+});
+</script>
 {% endblock %}

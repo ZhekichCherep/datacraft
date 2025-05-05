@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-
+from core.modules.fstream_operations import read_work_file
 from upload_file.views import cleanup_session
 from upload_file.views import COPIED_FILE_PATH, CONFIG_PATH, NUM_COLS, SHAPE, FILE_NAME, OBJ_COLS
 from .preprocesses.num_preprocessing import process_num
@@ -16,11 +16,10 @@ def num_preprocessings(request):
         missing_constant = request.POST.get('missing_constant')
         outlier_strategy = request.POST.get('outlier_strategy')
         normalization_strategy = request.POST.get('normalization_strategy')
-        process_num(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH], selected_columns, missing_strategy, missing_constant, outlier_strategy, normalization_strategy)
-        request.session['processing_done'] = True
+        request.session['pipelin_path'] = process_num(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH], selected_columns, missing_strategy, missing_constant, outlier_strategy, normalization_strategy)
+        
         return redirect('action_choice')
     
-
 
     try:
         context = {
@@ -58,5 +57,16 @@ def model_building(request):
     }
     return render(request, 'work_with_dataset/model_building.html', context)
 
-from django.shortcuts import render, redirect
 
+def export_dataset(request):
+    df = read_work_file(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH])
+    pass
+
+def export_pipeline(request):
+    pass
+
+def import_pipeline(request):
+    pass
+
+def apply_pipeline(request):
+    pass

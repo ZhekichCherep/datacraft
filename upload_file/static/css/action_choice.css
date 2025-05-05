@@ -75,3 +75,21 @@
 .btn-back-preview i {
     margin-right: 5px;
 }
+
+
+.action-card-form {
+    display: contents; 
+}
+
+.action-card-form .action-card {
+    cursor: pointer;
+}
+
+.action-card-form .action-card:hover {
+    background: #fff;
+}
+
+.fa-file-export { color: #4cc9f0; }
+.fa-project-diagram { color: #7209b7; }
+.fa-file-import { color: #3a86ff; }
+.fa-tasks { color: #f8961e; }
