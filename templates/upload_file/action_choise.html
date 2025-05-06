@@ -64,6 +64,7 @@
         </a>
 
         <!-- Выгрузка пайплайна -->
+        {% if export_pipeline_enabled %}
         <a href="{% url 'export_pipeline' %}" class="action-card">
             <div class="card-icon">
                 <i class="fas fa-project-diagram"></i>
@@ -71,6 +72,7 @@
             <h3>Export Pipeline</h3>
             <p>Download preprocessing pipeline</p>
         </a>
+        {% endif %}
 
         <!-- Загрузка пайплайна -->
         <form method="post" action="{% url 'import_pipeline' %}" enctype="multipart/form-data" class="action-card-form">
@@ -81,7 +83,7 @@
                 </div>
                 <h3>Import Pipeline</h3>
                 <p>Upload preprocessing pipeline</p>
-                <input type="file" name="pipeline_file" accept=".pkl,.joblib" style="display: none;">
+                <input type="file" name="pipeline_file" accept=".json" style="display: none;">
             </label>
         </form>
 

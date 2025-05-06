@@ -4,6 +4,7 @@ from core.modules.eda import read_data_file, get_preview_data
 from core.modules.fstream_operations import save_to_temp_dir, delete_files, read_work_file
 from django.conf import settings
 
+PIPELINE_PATH = 'pipeline_path'
 UPLOADED_FILE_PATH = 'uploaded_file_path'
 CONFIG_PATH = 'config_path'
 NUM_COLS = 'num_cols'
@@ -19,6 +20,7 @@ def cleanup_session(request):
         pass
     finally:
         request.session.flush()
+
 
 def upload_file(request):
     cleanup_session(request)
@@ -92,7 +94,10 @@ def action_choice(request):
     
     context = {
         'file_name': request.session.get('file_name', ''),
-        'shape': get_preview_data(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH])[SHAPE]
+        'shape': get_preview_data(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH])[SHAPE],
+        'export_pipeline_enabled': PIPELINE_PATH in request.session
     }
     return render(request, 'upload_file/action_choise.html', context)
 
+def import_pipeline(request):
+    pass

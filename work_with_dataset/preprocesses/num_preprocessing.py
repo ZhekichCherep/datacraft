@@ -280,7 +280,7 @@ LOG_BASES = {'e': np.log, '10': np.log10, '2': np.log2}
 MISSING_STRATEGIES = {'mean': fill_mean, 'median': fill_median, 'mode': fill_mode, 'drop': drop_misses}
 OUTLIER_STRATEGIES = {'zscore': zscore_strategy, 'iqr': iqr_strategy,
                        'winsorize': winsorize_strategy, 'cap': cap_strategy}
-NORMALIZTION_STRATEGY = {'minmax': minmax_scaling, 'standart': standart_scaling,
+NORMALIZTION_STRATEGY = {'minmax': minmax_scaling, 'standard': standart_scaling,
                          'robust': robust_scaling, 'log': log_transform}
   
 
