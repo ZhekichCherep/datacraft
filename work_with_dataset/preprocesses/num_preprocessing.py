@@ -31,8 +31,8 @@ def zscore_strategy(df: pd.DataFrame, columns: list, pipeline_saver: PipelineSav
     for column in columns:
         stats_dict = pipeline_saver.get_column_process(column, 'zscore')
         if stats_dict:
-            mean = stats_dict[column]['mean']
-            std = stats_dict[column]['std']
+            mean = stats_dict['mean']
+            std = stats_dict['std']
             
             z_scores = np.abs((df[column] - mean) / std)
             mask &= (z_scores <= threshold)
@@ -105,7 +105,7 @@ def cap_strategy(df: pd.DataFrame, columns: list, pipeline_saver: PipelineSaver,
 
 
 
-def minmax_scaling(df: pd.DataFrame, columns: list,  pipeline_saver: PipelineSaver, feature_range: tuple = (-1, 1)) -> pd.DataFrame:
+def minmax_scaling(df: pd.DataFrame, columns: list,  pipeline_saver: PipelineSaver, feature_range: tuple = (0, 1)) -> pd.DataFrame:
     if pipeline_saver.is_create:
         target_min, target_max = feature_range
         for column in columns:
@@ -124,7 +124,7 @@ def minmax_scaling(df: pd.DataFrame, columns: list,  pipeline_saver: PipelineSav
     for column in columns:
         params = pipeline_saver.get_column_process(column, 'minmax')
         if params:
-            target_min, target_max = params['feture_range']
+            target_min, target_max = params['feature_range']
             x_min, x_max = params['min'], params['max']
             df[column] = (df[column] - x_min) / (x_max - x_min) 
             df[column] = df[column] * (target_max - target_min) + target_min
@@ -277,20 +277,17 @@ def fill_mean(df: pd.DataFrame, columns: list, pipeline_saver: PipelineSaver)-> 
 
 
 LOG_BASES = {'e': np.log, '10': np.log10, '2': np.log2}
-MISSING_STRATEGIES = {'mean': fill_mean, 'median': fill_median, 'mode': fill_mode, 'drop': drop_misses}
-OUTLIER_STRATEGIES = {'zscore': zscore_strategy, 'iqr': iqr_strategy,
-                       'winsorize': winsorize_strategy, 'cap': cap_strategy}
-NORMALIZTION_STRATEGY = {'minmax': minmax_scaling, 'standard': standart_scaling,
-                         'robust': robust_scaling, 'log': log_transform}
-  
+NUM_COLS_STRATEGY = {'minmax': minmax_scaling, 'standard': standart_scaling,
+                     'robust': robust_scaling, 'log': log_transform, 'mean': fill_mean, 'median': fill_median,
+                     'mode': fill_mode, 'drop': drop_misses, 'zscore': zscore_strategy, 'iqr': iqr_strategy,
+                     'winsorize': winsorize_strategy, 'cap': cap_strategy, 'constant': fill_constant}
+ 
 
-def process_num(path_to_file: str, path_to_config: str, columns_to_process: list, 
+def process_num(path_to_file: str, path_to_config: str, path_to_pipeline: str, columns_to_process: list, 
                 missing_strategy: str, missing_constant: float, outlier_strategy: str, 
                 normalization_strategy: str, is_create_pipeline=True) -> str:
     
-    path = path_to_config[: path_to_config.rfind('\\') + 1]
-    path += 'pipeline.json'
-    pipeline_saver = PipelineSaver(is_create_pipeline, path)
+    pipeline_saver = PipelineSaver(is_create_pipeline, path_to_pipeline)
 
     df = fstream.read_work_file(path_to_file, path_to_config)
 
@@ -298,18 +295,17 @@ def process_num(path_to_file: str, path_to_config: str, columns_to_process: list
         if missing_strategy == 'constant':
             df = fill_constant(df, columns_to_process, pipeline_saver, missing_constant)
         else:
-            df = MISSING_STRATEGIES[missing_strategy](df, columns_to_process, pipeline_saver)
+            df = NUM_COLS_STRATEGY[missing_strategy](df, columns_to_process, pipeline_saver)
 
     if outlier_strategy:
-        df = OUTLIER_STRATEGIES[outlier_strategy](df, columns_to_process, pipeline_saver)
+        df = NUM_COLS_STRATEGY[outlier_strategy](df, columns_to_process, pipeline_saver)
     
     if normalization_strategy:
-        df = NORMALIZTION_STRATEGY[normalization_strategy](df, columns_to_process, pipeline_saver)
+        df = NUM_COLS_STRATEGY[normalization_strategy](df, columns_to_process, pipeline_saver)
 
     pipeline_saver.save_steps()
     fstream.save_work_file(df, path_to_file, path_to_config)
 
-    return path
 
     
 def count_lower_upper_iqr_bound(column: pd.Series) -> list:

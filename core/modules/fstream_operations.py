@@ -27,7 +27,7 @@ def write_json(dct: dict, path: str) -> None:
     except:
         return False
     
-def json_load( path: str) -> dict:
+def json_load(path: str) -> dict:
     try:
         with open(path, 'r', encoding='utf-8') as f:
             return json.load(f)

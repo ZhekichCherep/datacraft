@@ -7,10 +7,6 @@
 <link rel="stylesheet" href="{% static 'css/action_choice.css' %}">
 {% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/action_choice.js' %}"></script>
-{% endblock %}
-
 {% block content %}
 <div class="action-choice-container">
     <div class="action-header">
@@ -23,11 +19,21 @@
         <div class="file-info">
             <span class="file-name">{{ file_name }}</span>
             <span class="shape-info">{{ shape.0 }} rows × {{ shape.1 }} columns</span>
+            {% if is_import_pipeline %}
+                <span class="pipeline-status pipeline-imported">
+                    <i class="fas fa-check-circle"></i> Pipeline loaded
+                </span>
+            {% else %}
+                <span class="pipeline-status pipeline-new">
+                    <i class="fas fa-plus-circle"></i> Creating new pipeline
+                </span>
+            {% endif %}
         </div>
     </div>
 
     <div class="action-cards">
         <!-- Обработка числовых данных -->
+        {% if not is_import_pipeline %}
         <a href="{% url 'num_preprocessing' %}" class="action-card">
             <div class="card-icon">
                 <i class="fas fa-calculator"></i>
@@ -44,7 +50,7 @@
             <h3>Process Text Data</h3>
             <p>Tokenize, vectorize and analyze text columns</p>
         </a>
-
+        {% endif %}
         <!-- Построение ML модели -->
         <a href="{% url 'model_building' %}" class="action-card">
             <div class="card-icon">
@@ -77,17 +83,18 @@
         <!-- Загрузка пайплайна -->
         <form method="post" action="{% url 'import_pipeline' %}" enctype="multipart/form-data" class="action-card-form">
             {% csrf_token %}
-            <label class="action-card">
+            <input type="file" name="pipeline_file" id="pipelineFile" accept=".json" style="display: none;">
+            <label for="pipelineFile" class="action-card">  <!-- Используем for -->
                 <div class="card-icon">
                     <i class="fas fa-file-import"></i>
                 </div>
                 <h3>Import Pipeline</h3>
                 <p>Upload preprocessing pipeline</p>
-                <input type="file" name="pipeline_file" accept=".json" style="display: none;">
             </label>
         </form>
 
         <!-- Применение пайплайна -->
+        {% if is_import_pipeline %}
         <form method="post" action="{% url 'apply_pipeline' %}" enctype="multipart/form-data" class="action-card-form">
             {% csrf_token %}
             <label class="action-card">
@@ -95,10 +102,10 @@
                     <i class="fas fa-tasks"></i>
                 </div>
                 <h3>Apply Pipeline</h3>
-                <p>Apply pipeline to new dataset</p>
-                <input type="file" name="dataset_file" accept=".csv,.xlsx,.json" style="display: none;">
+                <p>Apply pipeline to current dataset</p>
             </label>
         </form>
+        {% endif %}
 
         <!-- Начать заново -->
         <form method="post" class="restart-form">
@@ -127,5 +134,10 @@ document.querySelectorAll('.action-card-form input[type="file"]').forEach(input 
         this.closest('form').submit();
     });
 });
+
+document.querySelector('.action-card-form[action*="apply_pipeline"] .action-card').addEventListener('click', function() {
+    this.closest('form').submit(); 
+});
+
 </script>
 {% endblock %}

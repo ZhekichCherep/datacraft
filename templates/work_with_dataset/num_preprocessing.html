@@ -70,44 +70,7 @@
                     </select>
                 </div>
             </div>
-
-            <!-- 3. Категориальные переменные -->
-            {% comment %} <div class="method-card">
-                <div class="method-header">
-                    <h4><i class="fas fa-tags"></i> Categorical Encoding</h4>
-                    <label class="switch">
-                        <input type="checkbox" name="process_categorical">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="method-options">
-                    <select name="categorical_strategy" class="form-select" disabled>
-                        <option value="onehot">One-Hot Encoding</option>
-                        <option value="ordinal">Ordinal Encoding</option>
-                        <option value="target">Target Encoding</option>
-                        <option value="frequency">Frequency Encoding</option>
-                    </select>
-                </div>
-            </div> {% endcomment %}
-
-            <!-- 4. Работа со строками -->
-            {% comment %} <div class="method-card">
-                <div class="method-header">
-                    <h4><i class="fas fa-font"></i> Text Processing</h4>
-                    <label class="switch">
-                        <input type="checkbox" name="process_text">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div class="method-options">
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="text_lowercase"> Convert to lowercase</label>
-                        <label><input type="checkbox" name="text_remove_punct"> Remove punctuation</label>
-                        <label><input type="checkbox" name="text_remove_stopwords"> Remove stop words</label>
-                        <label><input type="checkbox" name="text_stemming"> Apply stemming</label>
-                    </div>
-                </div>
-            </div> {% endcomment %}
+      
 
             <!-- 5. Нормализация -->
             <div class="method-card">
@@ -143,10 +106,4 @@
 
 {% block extra_js %}
 <script src="{% static 'work_with_dataset/js/num_preprocessing.js' %}"></script>
-<div id="loadingModal" class="modal-overlay" style="display: none;">
-    <div class="loading-content">
-        <div class="loading-spinner"></div>
-        <p>Processing your data...</p>
-    </div>
-</div>
 {% endblock %}

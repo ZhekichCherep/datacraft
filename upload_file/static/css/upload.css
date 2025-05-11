@@ -152,3 +152,25 @@ footer {
         transform: translateY(0);
     }
 }
+
+.pipeline-status {
+    margin-left: 15px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pipeline-imported {
+    background-color: #e6f7ee;
+    color: #0d8a4c;
+}
+
+.pipeline-new {
+    background-color: #e6f0ff;
+    color: #1a5fb4;
+}
+
+.pipeline-status i {
+    margin-right: 5px;
+}

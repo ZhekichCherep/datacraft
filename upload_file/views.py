@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from core.modules.forms import UploadFileForm
 from core.modules.eda import read_data_file, get_preview_data
-from core.modules.fstream_operations import save_to_temp_dir, delete_files, read_work_file
-from django.conf import settings
+from core.modules.fstream_operations import save_to_temp_dir, delete_files
+import json 
+from django.http import HttpResponse
+
 
 PIPELINE_PATH = 'pipeline_path'
 UPLOADED_FILE_PATH = 'uploaded_file_path'
@@ -12,6 +14,8 @@ OBJ_COLS = 'obj_cols'
 SHAPE = 'shape'
 COPIED_FILE_PATH = 'copied_path_file'
 FILE_NAME = 'file_name'
+IS_IMPORT_PIPELINE = 'is_import_pipeline'
+
 
 def cleanup_session(request):
     try:
@@ -48,7 +52,9 @@ def upload_file(request):
                                     CONFIG_PATH: config_path,
                                     COPIED_FILE_PATH: copied_file_path,
                                     FILE_NAME: uploaded_file.name})
-
+            path = request.session[CONFIG_PATH][: request.session[CONFIG_PATH].rfind('\\') + 1]
+            request.session[PIPELINE_PATH] = path + 'pipeline.json'
+            request.session[IS_IMPORT_PIPELINE] = False
             return redirect('preview')
         except Exception as e:
             cleanup_session(request)
@@ -57,6 +63,7 @@ def upload_file(request):
     cleanup_session(request)
     return render(request, 'upload_file/index.html')
 
+
 def preview(request):
     if COPIED_FILE_PATH not in request.session or CONFIG_PATH not in request.session:
         cleanup_session(request)
@@ -64,6 +71,7 @@ def preview(request):
     
     if request.method == 'POST':
         if 'confirm' in request.POST:
+
             return redirect('action_choice')  
         cleanup_session(request)
         return redirect('upload_file')
@@ -83,6 +91,7 @@ def preview(request):
         cleanup_session(request)
         return render(request, 'upload_file/index.html', {'errors': [str(e)]})
 
+
 def action_choice(request):
     if not all(key in request.session for key in [COPIED_FILE_PATH, CONFIG_PATH, SHAPE]):
         cleanup_session(request)
@@ -95,9 +104,29 @@ def action_choice(request):
     context = {
         'file_name': request.session.get('file_name', ''),
         'shape': get_preview_data(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH])[SHAPE],
-        'export_pipeline_enabled': PIPELINE_PATH in request.session
+        'export_pipeline_enabled': PIPELINE_PATH in request.session, 
+        IS_IMPORT_PIPELINE: request.session[IS_IMPORT_PIPELINE]
     }
     return render(request, 'upload_file/action_choise.html', context)
 
+
+
 def import_pipeline(request):
-    pass
+    if request.method != 'POST':
+        return redirect('action_choice')
+    
+    if 'pipeline_file' not in request.FILES:
+        return HttpResponse("No file selected", status=400)
+    
+    pipeline_file = request.FILES['pipeline_file']
+    
+    
+    try:
+        request.session[PIPELINE_PATH] = save_to_temp_dir(pipeline_file)
+        request.session[IS_IMPORT_PIPELINE] = True
+
+        return redirect('action_choice')
+    
+    except Exception as e:
+        return HttpResponse(f"Error processing file: {str(e)}", status=500)
+

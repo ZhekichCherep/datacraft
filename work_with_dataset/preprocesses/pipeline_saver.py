@@ -34,9 +34,9 @@ class PipelineSaver:
         if not self.steps:
             self.steps = {}
 
-
-
-
+    def get_steps(self) -> dict:
+        return self.steps
+    
 
 
 

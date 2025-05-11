@@ -1,6 +1,8 @@
 import pandas as pd
 import core.modules.fstream_operations as fstream_operations
 import numpy as np
+import xlrd
+import csv
 
 READ_FUNCTIONS = {
     'read_csv': pd.read_csv,
@@ -16,6 +18,16 @@ def read_data_file(file_path: str) -> tuple:
             {'header': None},
             {'skiprows': 1},
         ]
+        # sheet = xlrd.open_workbook(file_path).sheet_by_index(0) 
+  
+        # col = csv.writer(open("T.csv",  
+        #                     'w',  
+        #                     newline="")) 
+        
+        # for row in range(sheet.nrows): 
+        #     col.writerow(sheet.row_values(row)) 
+        
+        # df = pd.DataFrame(pd.read_csv("T.csv"))
     else:
         read_function_name = 'read_csv'
         param_grid = [
