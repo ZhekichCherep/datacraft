@@ -40,12 +40,9 @@
                 </div>
                 <div class="method-options">
                     <select name="missing_strategy" class="form-select">  
-                        <option value="mean">Mean</option>
-                        <option value="median">Median</option>
                         <option value="mode">Mode</option>
                         <option value="constant">Constant</option>
                         <option value="drop">Drop rows with missing</option>
-                        {% comment %} <option value="ml_pred"> ML predicts</option> {% endcomment %}
                     </select>
                     <input type="text" name="missing_constant" placeholder="Constant value" class="form-input" style="display: none;">
                     <p class="form-note"><small>* Required processing</small></p>

@@ -24,6 +24,26 @@ document.addEventListener('DOMContentLoaded', function() {
         updateState(); 
     }
 
+        function setupMissingStrategy() {
+        const missingStrategy = document.querySelector('select[name="missing_strategy"]');
+        const missingConstant = document.querySelector('input[name="missing_constant"]');
+        
+        if (missingStrategy && missingConstant) {
+            function updateConstantVisibility() {
+                const isConstant = missingStrategy.value === 'constant';
+                missingConstant.style.display = isConstant ? 'block' : 'none';
+                if (isConstant) {
+                    missingConstant.setAttribute('required', 'required');
+                } else {
+                    missingConstant.removeAttribute('required');
+                }
+            }
+            
+            missingStrategy.addEventListener('change', updateConstantVisibility);
+            updateConstantVisibility();
+        }
+    }
+
     function setupSelectAllButton() {
         const columnCheckboxes = document.querySelectorAll('.column-checkbox input');
         const selectAllBtn = document.createElement('button');
@@ -74,5 +94,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     setupSelectAllButton();
     setupFormValidation();
+    setupMissingStrategy();
     setupDependentOptions();
 });

@@ -5,9 +5,6 @@ from scipy.stats.mstats import winsorize
 import core.modules.fstream_operations as fstream
 from .pipeline_saver import PipelineSaver
 
-def mode(array: np.ndarray):
-    return stats.mode(array).mode
-
 
 def zscore_strategy(df: pd.DataFrame, columns: list, pipeline_saver: PipelineSaver, threshold=3, uniq_threshold=20) -> pd.DataFrame:
     if pipeline_saver.is_create:
@@ -245,7 +242,7 @@ def fill_median(df: pd.DataFrame, columns: list, pipeline_saver: PipelineSaver)-
 def fill_mode(df: pd.DataFrame, columns: list, pipeline_saver: PipelineSaver)-> pd.DataFrame:
     if pipeline_saver.is_create:
         for column in columns:
-            value_to_miss = mode(df[column].dropna().values)
+            value_to_miss = df[column].mode()[0]
             df[column] = df[column].fillna(value_to_miss)
             pipeline_saver.update_column_processes(column, 'mode', {'value_to_miss': value_to_miss})
             

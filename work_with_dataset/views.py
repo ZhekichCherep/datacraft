@@ -45,12 +45,16 @@ def text_preprocessing(request):
     if request.method == 'POST':
         
         selected_columns = request.POST.getlist('selected_columns')   
-        lowercase = request.POST.get('text_lowercase')
-        remove_punct = request.POST.get('text_remove_punct')
-        remove_stopwords = request.POST.get('text_remove_stopwords')
-        stemming = request.POST.get('text_stemming')
-        process_text_data(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH], request.session[PIPELINE_PATH],
-                                                     selected_columns, lowercase, remove_punct, remove_stopwords, stemming)
+        missing_strategy = request.POST.get('missing_strategy')
+        missing_constant = request.POST.get('missing_constant')
+        encode_strategy = request.POST.get('categorical_strategy')
+        lowercase = "lowercase" if request.POST.get('text_lowercase') else None
+        remove_punct = "remove_punct" if request.POST.get('text_remove_punct') else None
+        remove_stopwords = "remove_stopwords" if request.POST.get('text_remove_stopwords') else None
+        stemming = "stemming" if request.POST.get('text_stemming') else None
+        process_text_data(request.session[COPIED_FILE_PATH], request.session[CONFIG_PATH], request.session[PIPELINE_PATH], 
+                          selected_columns, True, missing_strategy, missing_constant, encode_strategy, 
+                          *[lowercase, remove_punct, remove_stopwords, remove_punct, stemming])
         
         return redirect('action_choice')
 
