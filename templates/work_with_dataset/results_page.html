@@ -1,0 +1,96 @@
+{% extends "upload_file/base.html" %}
+{% load static %}
+
+{% block title %}Model Results | DataCraft{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'work_with_dataset/css/results.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="results-container">
+    <div class="results-header">
+        <h2>Model Training Results</h2>
+    </div>
+    
+    <div class="metrics-section">
+        <h3>Model Performance Metrics</h3>
+        
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <div class="metric-value">{{ accuracy|floatformat:3 }}</div>
+                <div class="metric-name">Accuracy</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">{{ precision|floatformat:3 }}</div>
+                <div class="metric-name">Precision</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">{{ recall|floatformat:3 }}</div>
+                <div class="metric-name">Recall</div>
+            </div>
+            
+            <div class="metric-card">
+                <div class="metric-value">{{ f1|floatformat:3 }}</div>
+                <div class="metric-name">F1 Score</div>
+            </div>
+            
+            {% if roc_auc %}
+            <div class="metric-card">
+                <div class="metric-value">{{ roc_auc|floatformat:3 }}</div>
+                <div class="metric-name">ROC AUC</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="visualizations-section">
+        <div class="visualization-card">
+            <h3>ROC Curve</h3>
+            {% if roc_curve %}
+            <img src="data:image/png;base64,{{ roc_curve }}" alt="ROC Curve" class="roc-image">
+            {% else %}
+            <p class="no-roc">ROC Curve not available for this model</p>
+            {% endif %}
+        </div>
+        
+        <div class="visualization-card">
+            <h3>Confusion Matrix</h3>
+            {% if confusion_matrix %}
+            <div class="confusion-matrix">
+                <table>
+                    <tr>
+                        <th></th>
+                        <th>Predicted 0</th>
+                        <th>Predicted 1</th>
+                    </tr>
+                    <tr>
+                        <th>Actual 0</th>
+                        <td>{{ confusion_matrix.0.0 }}</td>
+                        <td>{{ confusion_matrix.0.1 }}</td>
+                    </tr>
+                    <tr>
+                        <th>Actual 1</th>
+                        <td>{{ confusion_matrix.1.0 }}</td>
+                        <td>{{ confusion_matrix.1.1 }}</td>
+                    </tr>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="actions-section">
+        <a href="{% url 'action_choice' %}" class="btn btn-back">
+            <i class="fas fa-arrow-left"></i> Back to Training
+        </a>
+        {% if model_path %}
+        <a href="{{ model_path }}" download class="btn btn-download">
+            <i class="fas fa-download"></i> Download Model
+        </a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

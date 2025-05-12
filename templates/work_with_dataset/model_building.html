@@ -1,0 +1,172 @@
+{% extends "upload_file/base.html" %}
+{% load static %}
+
+{% block title %}Model Training | DataCraft{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'work_with_dataset/css/model_training.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="training-container">
+    <div class="training-header">
+        <h2>Model Training</h2>
+        <div class="file-info">
+            <span class="file-name">{{ file_name }}</span>
+            <span class="shape-info">{{ shape.0 }} rows × {{ shape.1 }} columns</span>
+        </div>
+    </div>
+
+    <form method="post" class="training-form">
+        {% csrf_token %}
+
+        <div class="section">
+            <h3><i class="fas fa-columns"></i> Select Features and Target</h3>
+            
+            <div class="columns-selection">
+                <div class="features-selector">
+                    <h4>Features (X)</h4>
+                    <div class="columns-grid">
+                        {% for column in columns %}
+                        <label class="column-checkbox">
+                            <input type="checkbox" name="features" value="{{ column }}" checked>
+                            {{ column }}
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <div class="target-selector">
+                    <h4>Target (y)</h4>
+                    <select name="target" class="form-select" required>
+                        <option value="">-- Select Target Column --</option>
+                        {% for column in columns %}
+                        <option value="{{ column }}">{{ column }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3><i class="fas fa-project-diagram"></i> Model Selection</h3>
+            
+            <div class="model-cards">
+                <!-- Random Forest Card -->
+                <div class="model-card active" data-model="random_forest">
+                    <div class="model-icon">
+                        <i class="fas fa-tree"></i>
+                    </div>
+                    <h4>Random Forest</h4>
+                    <div class="model-params">
+                        <div class="param-group">
+                            <label>n_estimators</label>
+                            <input type="number" name="rf_n_estimators" value="100" min="1" class="form-input">
+                        </div>
+                        <div class="param-group">
+                            <label>max_depth</label>
+                            <input type="number" name="rf_max_depth" value="" placeholder="None" min="1" class="form-input">
+                        </div>
+                        <div class="param-group">
+                            <label>min_samples_split</label>
+                            <input type="number" name="rf_min_samples_split" value="2" min="2" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logistic Regression Card -->
+                <div class="model-card" data-model="logistic_regression">
+                    <div class="model-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Logistic Regression</h4>
+                    <div class="model-params" style="display:none;">
+                        <div class="param-group">
+                            <label>C (regularization)</label>
+                            <input type="number" name="lr_c" value="1.0" step="0.1" min="0.1" class="form-input">
+                        </div>
+                        <div class="param-group">
+                            <label>max_iter</label>
+                            <input type="number" name="lr_max_iter" value="100" min="1" class="form-input">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SVM Card -->
+                <div class="model-card" data-model="svm">
+                    <div class="model-icon">
+                        <i class="fas fa-border-all"></i>
+                    </div>
+                    <h4>Support Vector Machine</h4>
+                    <div class="model-params" style="display:none;">
+                        <div class="param-group">
+                            <label>C</label>
+                            <input type="number" name="svm_c" value="1.0" step="0.1" min="0.1" class="form-input">
+                        </div>
+                        <div class="param-group">
+                            <label>kernel</label>
+                            <select name="svm_kernel" class="form-select">
+                                <option value="rbf">RBF</option>
+                                <option value="linear">Linear</option>
+                                <option value="poly">Polynomial</option>
+                                <option value="sigmoid">Sigmoid</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <input type="hidden" name="selected_model" value="random_forest" id="selected_model">
+        </div>
+
+        <div class="section">
+            <h3><i class="fas fa-sliders-h"></i> Training Options</h3>
+            <div class="training-options">
+                <div class="option-group">
+                    <label class="option-label">
+                        <input type="checkbox" name="test_split" checked>
+                        Split into train/test sets
+                    </label>
+                    <div class="sub-options">
+                        <div class="param-group">
+                            <label>Test size (%)</label>
+                            <input type="number" name="test_size" value="20" min="5" max="50" class="form-input">
+                        </div>
+                        <div class="param-group">
+                            <label>Random state</label>
+                            <input type="number" name="random_state" value="42" class="form-input">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="option-group">
+                    <label class="option-label">
+                        <input type="checkbox" name="cross_validate">
+                        Cross-validation
+                    </label>
+                    <div class="sub-options" style="display:none;">
+                        <div class="param-group">
+                            <label>Folds</label>
+                            <input type="number" name="cv_folds" value="5" min="2" max="10" class="form-input">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="button" class="btn btn-back" onclick="window.location.href='{% url 'action_choice' %}'">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <button type="submit" class="btn btn-train" name="train">
+                Train Model <i class="fas fa-rocket"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'work_with_dataset/js/model_training.js' %}"></script>
+{% endblock %}

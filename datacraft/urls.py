@@ -14,14 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path
 
-from django.contrib import admin
 from django.urls import path
 from upload_file.views import upload_file, preview, action_choice, import_pipeline
 from work_with_dataset.views import (num_preprocessings, text_preprocessing, model_building,
-                                    export_dataset, export_pipeline,apply_pipeline)
+                                    export_dataset, export_pipeline,apply_pipeline, results_page)
 from django.urls import path
 
 urlpatterns = [
@@ -35,4 +32,5 @@ urlpatterns = [
     path('export_pipeline/', export_pipeline, name='export_pipeline'),
     path('import_pipeline/', import_pipeline, name='import_pipeline'),
     path('apply_pipeline/', apply_pipeline, name='apply_pipeline'),
+    path('results_page/', results_page, name='results_page')
 ]

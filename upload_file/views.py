@@ -15,6 +15,7 @@ SHAPE = 'shape'
 COPIED_FILE_PATH = 'copied_path_file'
 FILE_NAME = 'file_name'
 IS_IMPORT_PIPELINE = 'is_import_pipeline'
+ML_MODELS_DIR = 'ml_model_dir'
 
 
 def cleanup_session(request):
@@ -55,7 +56,9 @@ def upload_file(request):
             path = request.session[CONFIG_PATH][: request.session[CONFIG_PATH].rfind('\\') + 1]
             request.session[PIPELINE_PATH] = path + 'pipeline.json'
             request.session[IS_IMPORT_PIPELINE] = False
+            request.session[ML_MODELS_DIR] = path
             return redirect('preview')
+        
         except Exception as e:
             cleanup_session(request)
             return render(request, 'upload_file/index.html', {'errors': [str(e)]})
